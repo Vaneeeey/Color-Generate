@@ -145,35 +145,52 @@ function hslToRgb(h, s, l) {
   return [r, g, b];
 }
 
-/****************** 基础模式：多种方案生成 ******************/
+/****************** 基础模式：多种方案生成（去重） ******************/
 
 function generateBasicScheme(scheme, baseRgb) {
   const [h, s, l] = rgbToHsl(...baseRgb);
 
-  // 存放结果
-  const results = [baseRgb];
+  // 用来收集结果
+  const results = [];
+  const colorSet = new Set();
+
+  // 辅助函数：只添加不重复的颜色
+  function addColor(rgb) {
+    const key = rgb.join(",");
+    if (!colorSet.has(key)) {
+      colorSet.add(key);
+      results.push(rgb);
+    }
+  }
+
+  // 先把主色加入
+  addColor(baseRgb);
 
   switch (scheme) {
     case "complementary":
       // 互补色
-      results.push(hslToRgb((h + 180) % 360, s, l));
+      addColor(hslToRgb((h + 180) % 360, s, l));
       break;
+
     case "analogous":
       // 相邻色：-30, +30
-      results.push(hslToRgb((h + 330) % 360, s, l));
-      results.push(hslToRgb((h + 30) % 360, s, l));
+      addColor(hslToRgb((h + 330) % 360, s, l));
+      addColor(hslToRgb((h + 30) % 360, s, l));
       break;
+
     case "triadic":
       // 三分色：+120, +240
-      results.push(hslToRgb((h + 120) % 360, s, l));
-      results.push(hslToRgb((h + 240) % 360, s, l));
+      addColor(hslToRgb((h + 120) % 360, s, l));
+      addColor(hslToRgb((h + 240) % 360, s, l));
       break;
+
     case "tetradic":
       // 四分色：+90, +180, +270
-      results.push(hslToRgb((h + 90) % 360, s, l));
-      results.push(hslToRgb((h + 180) % 360, s, l));
-      results.push(hslToRgb((h + 270) % 360, s, l));
+      addColor(hslToRgb((h + 90) % 360, s, l));
+      addColor(hslToRgb((h + 180) % 360, s, l));
+      addColor(hslToRgb((h + 270) % 360, s, l));
       break;
+
     case "monochromatic":
       // 单色：可做多个明度变化
       const deltaArr = [-20, -10, 10, 20];
@@ -181,43 +198,49 @@ function generateBasicScheme(scheme, baseRgb) {
         let newL = l + d;
         if (newL < 0) newL = 0;
         if (newL > 100) newL = 100;
-        results.push(hslToRgb(h, s, newL));
+        addColor(hslToRgb(h, s, newL));
       });
       break;
+
     default:
       // 未知时默认三分色
-      results.push(hslToRgb((h + 120) % 360, s, l));
-      results.push(hslToRgb((h + 240) % 360, s, l));
+      addColor(hslToRgb((h + 120) % 360, s, l));
+      addColor(hslToRgb((h + 240) % 360, s, l));
       break;
   }
 
   return results;
 }
 
-/****************** 高级模式：根据色相、饱和度、明度范围生成 ******************/
+/****************** 高级模式：根据色相、饱和度、明度范围生成（去重） ******************/
 
 function generateAdvancedPalette(baseRgb, hueRange, satMin, satMax, lightMin, lightMax) {
-  // 将基色转 HSL
-  const [baseH, baseS, baseL] = rgbToHsl(...baseRgb);
+  const [baseH] = rgbToHsl(...baseRgb);
 
-  // 这里示例做一个简单的“在范围内取样”，比如每隔一定步进生成若干色
-  const step = 10; // 步进可自行调整
-  const colors = [];
-
-  // 色相范围： [baseH - hueRange, baseH + hueRange]
+  const step = 10;  // 可调
   const hMin = baseH - hueRange;
   const hMax = baseH + hueRange;
 
+  const colorSet = new Set();
+  const colors = [];
+
   for (let h = hMin; h <= hMax; h += step) {
-    const hh = (h + 360) % 360; // 归一化
+    const hh = (h + 360) % 360; // 归一化到0-359
     for (let ss = satMin; ss <= satMax; ss += 20) {
       for (let ll = lightMin; ll <= lightMax; ll += 20) {
         const rgbColor = hslToRgb(hh, ss, ll);
-        colors.push(rgbColor);
+
+        // 用字符串key来判断是否已存在
+        const key = rgbColor.join(",");
+        if (!colorSet.has(key)) {
+          colorSet.add(key);
+          colors.push(rgbColor);
+        }
       }
     }
   }
-  return colors;
+
+  return colors; // 无重复的 [r,g,b] 数组
 }
 
 /****************** 渲染色块 ******************/
