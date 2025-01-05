@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 视口设置 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 添加视口设置 -->
   <title>Apple 风格配色生成器</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -27,9 +27,6 @@
           class="mode-nav-item active" 
           id="basicModeNavItem"
           data-mode="basic"
-          role="button"
-          tabindex="0"
-          aria-selected="true"
         >
           基础模式
         </li>
@@ -37,97 +34,91 @@
           class="mode-nav-item" 
           id="advancedModeNavItem"
           data-mode="advanced"
-          role="button"
-          tabindex="0"
-          aria-selected="false"
         >
           高级模式
         </li>
       </ul>
     </nav>
 
-    <!-- 模式切换区域 -->
-    <div class="mode-wrapper">
-      <!-- 基础模式 -->
-      <section class="mode-container" id="basicModeContainer">
-        <div class="form-group">
-          <label class="input-label" for="colorTextBasic">主色（HEX / RGB / HSL）:</label>
-          <input
-            type="text"
-            id="colorTextBasic"
-            placeholder="#4287f5 或 rgb(66,135,245) 或 hsl(216,80%,61%)"
-            class="form-input"
-          />
-        </div>
-        <div class="form-group">
-          <label class="input-label" for="colorPickerBasic">或使用取色器:</label>
-          <input type="color" id="colorPickerBasic" value="#4287f5" />
-        </div>
+    <!-- 基础模式 -->
+    <section class="mode-container" id="basicModeContainer">
+      <div class="form-group">
+        <label class="input-label" for="colorTextBasic">主色（HEX / RGB / HSL）:</label>
+        <input
+          type="text"
+          id="colorTextBasic"
+          placeholder="#4287f5 或 rgb(66,135,245) 或 hsl(216,80%,61%)"
+          class="form-input"
+        />
+      </div>
+      <div class="form-group">
+        <label class="input-label" for="colorPickerBasic">或使用取色器:</label>
+        <input type="color" id="colorPickerBasic" value="#4287f5" />
+      </div>
 
-        <div class="form-group">
-          <label class="input-label" for="schemeSelect">选择配色方案:</label>
-          <select id="schemeSelect" class="form-select">
-            <option value="complementary">互补色 (Complementary)</option>
-            <option value="analogous">相邻色 (Analogous)</option>
-            <option value="triadic" selected>三分色 (Triadic)</option>
-            <option value="tetradic">四分色 (Tetradic)</option>
-            <option value="monochromatic">单色 (Monochromatic)</option>
-          </select>
-        </div>
+      <div class="form-group">
+        <label class="input-label" for="schemeSelect">选择配色方案:</label>
+        <select id="schemeSelect" class="form-select">
+          <option value="complementary">互补色 (Complementary)</option>
+          <option value="analogous">相邻色 (Analogous)</option>
+          <option value="triadic" selected>三分色 (Triadic)</option>
+          <option value="tetradic">四分色 (Tetradic)</option>
+          <option value="monochromatic">单色 (Monochromatic)</option>
+        </select>
+      </div>
 
-        <button id="generateBtnBasic" class="btn-primary">生成</button>
-      </section>
+      <button id="generateBtnBasic" class="btn-primary">生成</button>
+    </section>
 
-      <!-- 高级模式 -->
-      <section class="mode-container" id="advancedModeContainer">
-        <div class="form-group">
-          <label class="input-label" for="colorTextAdvanced">主色（HEX / RGB / HSL）:</label>
-          <input
-            type="text"
-            id="colorTextAdvanced"
-            placeholder="#4287f5 或 rgb(66,135,245) 或 hsl(216,80%,61%)"
-            class="form-input"
-          />
-        </div>
-        <div class="form-group">
-          <label class="input-label" for="colorPickerAdvanced">或使用取色器:</label>
-          <input type="color" id="colorPickerAdvanced" value="#4287f5" />
-        </div>
+    <!-- 高级模式 -->
+    <section class="mode-container" id="advancedModeContainer" style="display: none;">
+      <div class="form-group">
+        <label class="input-label" for="colorTextAdvanced">主色（HEX / RGB / HSL）:</label>
+        <input
+          type="text"
+          id="colorTextAdvanced"
+          placeholder="#4287f5 或 rgb(66,135,245) 或 hsl(216,80%,61%)"
+          class="form-input"
+        />
+      </div>
+      <div class="form-group">
+        <label class="input-label" for="colorPickerAdvanced">或使用取色器:</label>
+        <input type="color" id="colorPickerAdvanced" value="#4287f5" />
+      </div>
 
-        <div class="form-group range-group">
-          <label class="input-label">色相 (H) 范围（±）:</label>
-          <input
-            type="range"
-            id="hueRange"
-            min="0"
-            max="180"
-            value="30"
-            class="range-input"
-          />
-          <span id="hueValue" class="range-info">±30</span>
-        </div>
+      <div class="form-group range-group">
+        <label class="input-label">色相 (H) 范围（±）:</label>
+        <input
+          type="range"
+          id="hueRange"
+          min="0"
+          max="180"
+          value="30"
+          class="range-input"
+        />
+        <span id="hueValue" class="range-info">±30</span>
+      </div>
 
-        <div class="form-group range-group">
-          <label class="input-label">饱和度 (S%) 范围:</label>
-          <div class="range-dual">
-            <input type="range" id="satMin" min="0" max="100" value="0" class="range-input" />
-            <input type="range" id="satMax" min="0" max="100" value="100" class="range-input" />
-          </div>
-          <span id="satValue" class="range-info">0% - 100%</span>
+      <div class="form-group range-group">
+        <label class="input-label">饱和度 (S%) 范围:</label>
+        <div class="range-dual">
+          <input type="range" id="satMin" min="0" max="100" value="0" class="range-input" />
+          <input type="range" id="satMax" min="0" max="100" value="100" class="range-input" />
         </div>
+        <span id="satValue" class="range-info">0% - 100%</span>
+      </div>
 
-        <div class="form-group range-group">
-          <label class="input-label">明度 (L%) 范围:</label>
-          <div class="range-dual">
-            <input type="range" id="lightMin" min="0" max="100" value="0" class="range-input" />
-            <input type="range" id="lightMax" min="0" max="100" value="100" class="range-input" />
-          </div>
-          <span id="lightValue" class="range-info">0% - 100%</span>
+      <div class="form-group range-group">
+        <label class="input-label">明度 (L%) 范围:</label>
+        <div class="range-dual">
+          <input type="range" id="lightMin" min="0" max="100" value="0" class="range-input" />
+          <input type="range" id="lightMax" min="0" max="100" value="100" class="range-input" />
         </div>
+        <span id="lightValue" class="range-info">0% - 100%</span>
+      </div>
 
-        <button id="generateBtnAdvanced" class="btn-primary">生成</button>
-      </section>
-    </div>
+      <button id="generateBtnAdvanced" class="btn-primary">生成</button>
+    </section>
 
     <!-- 结果展示区 -->
     <section class="result-section">
