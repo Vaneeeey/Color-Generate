@@ -107,22 +107,9 @@ body {
 }
 
 .mode-container {
-  width: 50%; /* 每个模式容器占据一半宽度 */
+  width: 50%; /* 每个模式容器占据一半宽度（桌面） */
   padding: 1rem;
   box-sizing: border-box;
-  /* 可选：为了确保内容不会因为宽度问题溢出，可以添加 overflow: hidden; */
-}
-
-/* 调整模式容器宽度在移动设备上 */
-@media (max-width: 767px) {
-  .mode-wrapper {
-    flex-direction: row; /* 保持为行方向 */
-    width: 200%; /* 保持为两个模式容器的总宽度 */
-  }
-
-  .mode-container {
-    width: 100%; /* 每个模式容器占据100%宽度 */
-  }
 }
 
 /* 表单组 */
@@ -356,10 +343,10 @@ body {
 
   /* 表单组布局 */
   /* 已在全局样式中设置 */
-  
+
   /* Range 输入 */
   /* 已在全局样式中设置 */
-  
+
   /* 色卡 */
   .color-card {
     width: 100px;
