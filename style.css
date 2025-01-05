@@ -35,8 +35,6 @@ body {
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-  position: relative; /* 为模式容器定位做准备 */
-  overflow: hidden; /* 防止模式容器溢出 */
 }
 
 /* Hero */
@@ -99,17 +97,21 @@ body {
   border-bottom-color: #007aff; /* 让选中的 li 有一条蓝色下划线 */
 }
 
-/* 模式切换区域 */
-.mode-wrapper {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-  width: 200%; /* 两个模式容器的总宽度 */
+.mode-container {
+  margin-bottom: 2rem;
+  opacity: 1; /* 默认可见 */
+  transition: opacity 0.5s ease-in-out; /* 添加过渡效果 */
 }
 
-.mode-container {
-  width: 50%; /* 每个模式容器占据一半宽度（桌面） */
-  padding: 1rem;
-  box-sizing: border-box;
+/* 动画类 */
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
 }
 
 /* 表单组 */
@@ -342,10 +344,22 @@ body {
   }
 
   /* 表单组布局 */
-  /* 已在全局样式中设置 */
+  .mode-container {
+    display: block;
+  }
+
+  .form-group {
+    width: 100%;
+  }
 
   /* Range 输入 */
-  /* 已在全局样式中设置 */
+  .range-input {
+    width: 100%;
+  }
+
+  .range-dual {
+    flex-direction: column;
+  }
 
   /* 色卡 */
   .color-card {
