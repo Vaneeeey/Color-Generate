@@ -27,6 +27,9 @@
           class="mode-nav-item active" 
           id="basicModeNavItem"
           data-mode="basic"
+          role="button"
+          tabindex="0"
+          aria-selected="true"
         >
           基础模式
         </li>
@@ -34,6 +37,9 @@
           class="mode-nav-item" 
           id="advancedModeNavItem"
           data-mode="advanced"
+          role="button"
+          tabindex="0"
+          aria-selected="false"
         >
           高级模式
         </li>
@@ -43,7 +49,7 @@
     <!-- 模式切换区域 -->
     <div class="mode-wrapper">
       <!-- 基础模式 -->
-      <section class="mode-container active" id="basicModeContainer">
+      <section class="mode-container" id="basicModeContainer">
         <div class="form-group">
           <label class="input-label" for="colorTextBasic">主色（HEX / RGB / HSL）:</label>
           <input
