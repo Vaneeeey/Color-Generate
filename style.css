@@ -110,19 +110,18 @@ body {
   width: 50%; /* 每个模式容器占据一半宽度 */
   padding: 1rem;
   box-sizing: border-box;
-  transition: transform 0.5s ease-in-out;
+  /* 可选：为了确保内容不会因为宽度问题溢出，可以添加 overflow: hidden; */
 }
 
-/* 移动视图 */
+/* 调整模式容器宽度在移动设备上 */
 @media (max-width: 767px) {
   .mode-wrapper {
-    flex-direction: column;
-    width: 100%;
+    flex-direction: row; /* 保持为行方向 */
+    width: 200%; /* 保持为两个模式容器的总宽度 */
   }
 
   .mode-container {
-    width: 100%;
-    transform: translateX(0);
+    width: 100%; /* 每个模式容器占据100%宽度 */
   }
 }
 
@@ -356,23 +355,11 @@ body {
   }
 
   /* 表单组布局 */
-  .mode-container {
-    display: block;
-  }
-
-  .form-group {
-    width: 100%;
-  }
-
+  /* 已在全局样式中设置 */
+  
   /* Range 输入 */
-  .range-input {
-    width: 100%;
-  }
-
-  .range-dual {
-    flex-direction: column;
-  }
-
+  /* 已在全局样式中设置 */
+  
   /* 色卡 */
   .color-card {
     width: 100px;
