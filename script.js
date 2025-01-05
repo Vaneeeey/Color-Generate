@@ -283,8 +283,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const basicModeNavItem = document.getElementById("basicModeNavItem");
   const advancedModeNavItem = document.getElementById("advancedModeNavItem");
 
-  // 两种模式下的容器
+  // 模式切换区域
+  const modeWrapper = document.querySelector(".mode-wrapper");
+
+  // 基础模式容器
   const basicModeContainer = document.getElementById("basicModeContainer");
+  // 高级模式容器
   const advancedModeContainer = document.getElementById("advancedModeContainer");
 
   // 基础模式
@@ -308,23 +312,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const paletteContainer = document.getElementById("paletteContainer");
 
+  // 当前模式
+  let currentMode = "basic";
+
   // 模式切换函数
   function switchToMode(mode) {
-    // 移除所有 nav-item 的 active
-    basicModeNavItem.classList.remove("active");
-    advancedModeNavItem.classList.remove("active");
+    if (mode === currentMode) return; // 如果是当前模式，什么都不做
 
-    // 隐藏容器
-    basicModeContainer.style.display = "none";
-    advancedModeContainer.style.display = "none";
+    // 定义滑动方向
+    let translateXPercent;
+    if (mode === "advanced") {
+      translateXPercent = -50; // 滑动到左侧，显示高级模式
+    } else {
+      translateXPercent = 0; // 滑动回基础模式
+    }
 
+    // 切换 active 类
     if (mode === "basic") {
       basicModeNavItem.classList.add("active");
-      basicModeContainer.style.display = "block";
+      advancedModeNavItem.classList.remove("active");
     } else {
       advancedModeNavItem.classList.add("active");
-      advancedModeContainer.style.display = "block";
+      basicModeNavItem.classList.remove("active");
     }
+
+    // 应用滑动动画
+    modeWrapper.style.transform = `translateX(${translateXPercent}%)`;
+
+    // 更新当前模式
+    currentMode = mode;
 
     // 清空结果区域
     paletteContainer.innerHTML = "";
