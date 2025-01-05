@@ -319,10 +319,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function switchToMode(mode) {
     if (mode === currentMode) return; // 如果是当前模式，什么都不做
 
-    // 定义滑动方向
+    // 定义滑动位置
     let translateXPercent;
     if (mode === "advanced") {
-      translateXPercent = -50; // 滑动到左侧，显示高级模式
+      translateXPercent = -100; // 滑动到左侧，显示高级模式
     } else {
       translateXPercent = 0; // 滑动回基础模式
     }
