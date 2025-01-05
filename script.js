@@ -283,12 +283,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const basicModeNavItem = document.getElementById("basicModeNavItem");
   const advancedModeNavItem = document.getElementById("advancedModeNavItem");
 
-  // 模式切换区域
-  const modeWrapper = document.querySelector(".mode-wrapper");
-
-  // 基础模式容器
+  // 两种模式下的容器
   const basicModeContainer = document.getElementById("basicModeContainer");
-  // 高级模式容器
   const advancedModeContainer = document.getElementById("advancedModeContainer");
 
   // 基础模式
@@ -315,49 +311,62 @@ document.addEventListener("DOMContentLoaded", () => {
   // 当前模式
   let currentMode = "basic";
 
-  // 获取当前设备是否为移动设备
-  function isMobile() {
-    return window.innerWidth <= 767;
-  }
-
   // 模式切换函数
   function switchToMode(mode) {
     if (mode === currentMode) return; // 如果是当前模式，什么都不做
 
-    // 定义滑动位置
-    let translateXPercent;
-    if (mode === "advanced") {
-      translateXPercent = isMobile() ? -100 : -50; // 移动端滑动 -100%，桌面端滑动 -50%
-    } else {
-      translateXPercent = 0; // 滑动回基础模式
-    }
+    // 找到当前和目标容器
+    const currentContainer = mode === "basic" ? advancedModeContainer : basicModeContainer;
+    const targetContainer = mode === "basic" ? basicModeContainer : advancedModeContainer;
 
     // 切换 active 类
     if (mode === "basic") {
       basicModeNavItem.classList.add("active");
       advancedModeNavItem.classList.remove("active");
-      advancedModeNavItem.setAttribute("aria-selected", "false");
-      basicModeNavItem.setAttribute("aria-selected", "true");
     } else {
       advancedModeNavItem.classList.add("active");
       basicModeNavItem.classList.remove("active");
-      advancedModeNavItem.setAttribute("aria-selected", "true");
-      basicModeNavItem.setAttribute("aria-selected", "false");
     }
 
-    // 应用滑动动画
-    modeWrapper.style.transform = `translateX(${translateXPercent}%)`;
+    // 添加 fade-out 类到当前容器
+    currentContainer.classList.add("fade-out");
 
-    // 更新当前模式
-    currentMode = mode;
+    // 等待动画结束后隐藏当前容器并显示目标容器
+    currentContainer.addEventListener(
+      "transitionend",
+      function handleTransitionEnd() {
+        // 移除事件监听，避免重复触发
+        currentContainer.removeEventListener("transitionend", handleTransitionEnd);
 
-    // 清空结果区域
-    paletteContainer.innerHTML = "";
-    paletteContainer.classList.remove("animate-in");
+        // 隐藏当前容器
+        currentContainer.style.display = "none";
+        currentContainer.classList.remove("fade-out");
+
+        // 显示目标容器并添加 fade-in 类
+        targetContainer.style.display = "block";
+        targetContainer.classList.add("fade-in");
+
+        // 移除 fade-in 类 after transition to reset
+        targetContainer.addEventListener(
+          "transitionend",
+          function handleFadeIn() {
+            targetContainer.classList.remove("fade-in");
+            targetContainer.removeEventListener("transitionend", handleFadeIn);
+          }
+        );
+
+        // 更新当前模式
+        currentMode = mode;
+
+        // 清空结果区域
+        paletteContainer.innerHTML = "";
+        paletteContainer.classList.remove("animate-in");
+      }
+    );
   }
 
   // 默认先显示基础模式
-  switchToMode("basic");
+  basicModeContainer.style.display = "block";
 
   // 监听导航栏点击事件
   basicModeNavItem.addEventListener("click", () => {
@@ -431,16 +440,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const advColors = generateAdvancedPalette(baseRgb, hr, sMin, sMax, lMin, lMax);
     renderPalette(advColors);
-  });
-
-  // 监听窗口大小变化，确保滑动位置正确
-  window.addEventListener("resize", () => {
-    // 如果当前模式是高级模式，重新设置 translateX based on new screen size
-    if (currentMode === "advanced") {
-      let translateXPercent = isMobile() ? -100 : -50;
-      modeWrapper.style.transform = `translateX(${translateXPercent}%)`;
-    } else {
-      modeWrapper.style.transform = `translateX(0%)`;
-    }
   });
 });
