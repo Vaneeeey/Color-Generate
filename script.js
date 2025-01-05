@@ -315,6 +315,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // 当前模式
   let currentMode = "basic";
 
+  // 获取当前设备是否为移动设备
+  function isMobile() {
+    return window.innerWidth <= 767;
+  }
+
   // 模式切换函数
   function switchToMode(mode) {
     if (mode === currentMode) return; // 如果是当前模式，什么都不做
@@ -322,7 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 定义滑动位置
     let translateXPercent;
     if (mode === "advanced") {
-      translateXPercent = -100; // 滑动到左侧，显示高级模式
+      translateXPercent = isMobile() ? -100 : -50; // 移动端滑动 -100%，桌面端滑动 -50%
     } else {
       translateXPercent = 0; // 滑动回基础模式
     }
@@ -331,9 +336,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (mode === "basic") {
       basicModeNavItem.classList.add("active");
       advancedModeNavItem.classList.remove("active");
+      advancedModeNavItem.setAttribute("aria-selected", "false");
+      basicModeNavItem.setAttribute("aria-selected", "true");
     } else {
       advancedModeNavItem.classList.add("active");
       basicModeNavItem.classList.remove("active");
+      advancedModeNavItem.setAttribute("aria-selected", "true");
+      basicModeNavItem.setAttribute("aria-selected", "false");
     }
 
     // 应用滑动动画
@@ -422,5 +431,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const advColors = generateAdvancedPalette(baseRgb, hr, sMin, sMax, lMin, lMax);
     renderPalette(advColors);
+  });
+
+  // 监听窗口大小变化，确保滑动位置正确
+  window.addEventListener("resize", () => {
+    // 如果当前模式是高级模式，重新设置 translateX based on new screen size
+    if (currentMode === "advanced") {
+      let translateXPercent = isMobile() ? -100 : -50;
+      modeWrapper.style.transform = `translateX(${translateXPercent}%)`;
+    } else {
+      modeWrapper.style.transform = `translateX(0%)`;
+    }
   });
 });
